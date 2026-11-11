@@ -50,6 +50,9 @@ jobs:
         NEXTAUTH_SECRET: test-secret
         NEXTAUTH_URL: http://localhost:3000
 
+    - name: Install Playwright browsers
+      run: npx playwright install --with-deps
+
     - name: Run E2E tests
       run: npm run test:e2e
       env:
