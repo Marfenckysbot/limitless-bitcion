@@ -1,88 +1,54 @@
-# LuxuryGold - Premium Jewelry Marketplace & Secure Shipping
+# LuxuryGold — marketplace prototype
 
-A production-ready platform for buying & selling gold & fine jewelry, with Bitcoin conversion and secure shipping services.
+LuxuryGold is an early-stage Next.js marketplace prototype for precious metals and fine jewelry. The repository contains customer-facing pages, authentication scaffolding, database models and several API route foundations.
 
-## Features
+**This is not production-ready.** Do not accept customer funds, promise shipments, claim KYC/AML compliance, or use it to store real identity documents until the integrations and controls listed below are completed and independently tested.
 
-- Buy & sell precious metals and jewelry
-- Bitcoin to cash conversion
-- Secure shipping with real-time tracking
-- Multi-tier shipping options
-- KYC/AML compliance
-- Blockchain-backed chain of custody
-- Live video appraisals
-- Vault storage options
+## Current project status
 
-## Quick Start
+- Next.js App Router, TypeScript and Tailwind CSS.
+- Prisma/PostgreSQL schema and NextAuth scaffolding.
+- Development-only sample market prices can be enabled with `USE_MOCK_PROVIDERS=true`; responses are explicitly labelled `DEMO`.
+- Bitcoin conversion is disabled by default. No live quote, exchange, payout or settlement provider is integrated.
+- Shipment creation returns `503 SHIPMENT_PROVIDER_NOT_CONFIGURED` instead of inventing shipment IDs or pickup tokens.
+- KYC flow is a workflow placeholder, not an identity-verification or AML certification.
+- Payment processing, custody, vault storage and live video appraisal must not be represented as operational.
 
-```bash
-# Install dependencies
+## Local development
+
+This repository currently has no committed npm lockfile. Install from the declared dependency ranges:
+
+```sh
 npm install
-
-# Setup environment variables
 cp .env.example .env.local
-
-# Run database migrations
-npm run db:migrate
-
-# Seed demo data
-npm run db:seed
-
-# Start development server
 npm run dev
 ```
 
-Visit [http://localhost:3000](http://localhost:3000)
+Visit [http://localhost:3000](http://localhost:3000).
 
-## Technology Stack
+## Checks
 
-- Next.js 14 with App Router
-- TypeScript
-- Tailwind CSS
-- PostgreSQL with Prisma
-- NextAuth.js
-- Jest & Playwright for testing
-
-## Development
-
-```bash
-# Run tests
-npm test
-
-# Run E2E tests
-npm run test:e2e
-
-# Run linting
+```sh
 npm run lint
+npm run type-check
+npm test
+npm run test:e2e
 ```
 
-## Security & Compliance
+The GitHub Actions workflow also installs Playwright browsers. A Snyk scan runs only when the repository secret `SNYK_TOKEN` is configured; otherwise the workflow reports that the scan was skipped. A skipped scan is not a security pass.
 
-- TLS/HTTPS required
-- HSTS enabled
-- CSP headers configured
-- Rate limiting implemented
-- KYC/AML compliant
-- Regular security audits
-- 2FA supported
+## Before any production launch
 
-## Environment Variables
+- Commit and review a reproducible npm lockfile.
+- Complete dependency, type, unit, integration and browser testing.
+- Implement server-side order persistence, payment idempotency and signed webhooks.
+- Integrate a real market-data/crypto provider and verify quote freshness.
+- Implement carrier booking, tracking, insurance and claims workflows.
+- Integrate a licensed KYC provider and review AML obligations with qualified counsel.
+- Add distributed rate limiting, audit logging, monitoring, backup and incident response.
+- Review privacy, data retention, PCI scope, custody and financial-services obligations.
+- Verify all claims and service availability before publishing marketing copy.
 
-Required environment variables:
+## Secrets
 
-```env
-DATABASE_URL=postgresql://...
-NEXTAUTH_SECRET=your-secret
-NEXTAUTH_URL=http://localhost:3000
-STRIPE_SECRET_KEY=sk_test_...
-COINBASE_API_KEY=...
-STORAGE_BUCKET=...
-```
-
-## API Documentation
-
-API documentation is available at `/api-docs` when running in development mode.
-
-## License
-
-Copyright © 2025. All rights reserved.
+Never commit `.env.local` or real API credentials. Keep provider secrets in the deployment platform's encrypted environment settings. The committed `.env.example` contains placeholders only.

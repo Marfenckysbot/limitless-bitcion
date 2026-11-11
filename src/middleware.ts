@@ -10,6 +10,7 @@ export async function middleware(request: NextRequest) {
     '/',
     '/auth/signin',
     '/auth/signup',
+    '/auth/error',
     '/api/spot-price',
   ]
 
