@@ -41,6 +41,11 @@ jobs:
       env:
         DATABASE_URL: postgresql://postgres:postgres@localhost:5432/luxurygold_test
 
+    - name: Apply migrations to CI database
+      run: npx prisma migrate deploy
+      env:
+        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/luxurygold_test
+
     - name: Run linting
       run: npm run lint
 
