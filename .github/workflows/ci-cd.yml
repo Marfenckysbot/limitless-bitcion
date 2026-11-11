@@ -59,6 +59,15 @@ jobs:
         NEXTAUTH_SECRET: test-secret
         NEXTAUTH_URL: http://localhost:3000
 
+    - name: Build Next.js application
+      run: npm run build
+      env:
+        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/luxurygold_test
+        NEXTAUTH_SECRET: test-secret-for-ci-only
+        NEXTAUTH_URL: http://localhost:3000
+        GOOGLE_CLIENT_ID: ci-placeholder
+        GOOGLE_CLIENT_SECRET: ci-placeholder
+
     - name: Install Playwright browsers
       run: npx playwright install --with-deps
 
