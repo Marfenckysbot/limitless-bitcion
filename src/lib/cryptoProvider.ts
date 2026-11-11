@@ -1,4 +1,4 @@
-type CryptoQuote = {
+export type CryptoQuote = {
   quoteId: string
   btcRate: number
   feePercent: number
@@ -7,11 +7,14 @@ type CryptoQuote = {
   currency: string
   expiresAt: string
   requiredConfirmations: number
+  mode: 'DEMO'
 }
 
 import { envBool } from './env'
 
-const useMock = envBool('USE_MOCK_PROVIDERS', true)
+// Live conversion is disabled by default. Mock quotes must be explicitly
+// enabled and are labelled DEMO so they cannot be mistaken for market prices.
+const useMock = envBool('USE_MOCK_PROVIDERS', false)
 
 export async function getBTCQuote(btcAmount: number, preferredProvider?: string): Promise<CryptoQuote> {
   if (useMock) return mockGetBTCQuote(btcAmount)
@@ -24,19 +27,19 @@ function mockGetBTCQuote(btcAmount: number): CryptoQuote {
   const feeAmount = btcAmount * btcRate * feePercent
   const fiatAmount = (btcAmount * btcRate) - feeAmount
   return {
-    quoteId: `mock_btc_${Date.now()}`,
+    quoteId: `demo_btc_${Date.now()}`,
     btcRate,
     feePercent,
     feeAmount,
     fiatAmount,
     currency: 'USD',
     expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString(),
-    requiredConfirmations: 2
+    requiredConfirmations: 2,
+    mode: 'DEMO'
   }
 }
 
-async function prodGetBTCQuote(btcAmount: number, preferredProvider?: string): Promise<CryptoQuote> {
-  // TODO: integrate with BitPay/Coinbase/third-party provider with fallback logic
-  // For now, return mock
-  return mockGetBTCQuote(btcAmount)
+async function prodGetBTCQuote(_btcAmount: number, _preferredProvider?: string): Promise<CryptoQuote> {
+  // A production provider and settlement flow have not been integrated.
+  throw new Error('CRYPTO_PROVIDER_NOT_CONFIGURED')
 }
