@@ -3,15 +3,12 @@ import { createMocks } from 'node-mocks-http';
 import { POST } from '@/app/api/shipments/create/route';
 
 describe('/api/shipments/create', () => {
-  test('creates shipping quote successfully', async () => {
-    const { req, res } = createMocks({
+  test('does not fabricate a shipment before a provider is configured', async () => {
+    const { req } = createMocks({
       method: 'POST',
       body: {
         userId: 'test-user',
-        items: [{
-          type: 'JEWELRY',
-          description: 'Test item'
-        }],
+        items: [{ type: 'JEWELRY', description: 'Test item' }],
         declaredValue: 1000,
         tier: 'STANDARD',
         pickupWindow: new Date().toISOString(),
@@ -26,23 +23,18 @@ describe('/api/shipments/create', () => {
       }
     });
 
-    const response = await POST(req);
+    const response = await POST(req as any);
     const data = await response.json();
 
-    expect(response.status).toBe(200);
-    expect(data).toHaveProperty('shipmentId');
-    expect(data).toHaveProperty('quote');
-    expect(data.quote).toHaveProperty('baseFee');
-    expect(data.quote.baseFee).toBeGreaterThanOrEqual(25);
+    expect(response.status).toBe(503);
+    expect(data.code).toBe('SHIPMENT_PROVIDER_NOT_CONFIGURED');
+    expect(data).not.toHaveProperty('shipmentId');
+    expect(data).not.toHaveProperty('pickupToken');
   });
 
-  test('validates required fields', async () => {
-    const { req, res } = createMocks({
-      method: 'POST',
-      body: {}
-    });
-
-    const response = await POST(req);
+  test('validates required fields before reporting the unavailable provider', async () => {
+    const { req } = createMocks({ method: 'POST', body: {} });
+    const response = await POST(req as any);
     expect(response.status).toBe(400);
   });
 });
