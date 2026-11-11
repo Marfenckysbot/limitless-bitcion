@@ -76,6 +76,15 @@ export default function SignInPage() {
           >
             {loading ? 'Signing in…' : 'Sign in'}
           </button>
+          {process.env.NEXT_PUBLIC_GOOGLE_LOGIN_ENABLED === 'true' && (
+            <button
+              type="button"
+              onClick={() => signIn('google', { callbackUrl: '/' })}
+              className="w-full rounded-md border border-charcoal-light px-4 py-3 font-semibold text-white hover:border-gold-light"
+            >
+              Continue with Google
+            </button>
+          )}
         </form>
         <p className="mt-6 text-sm text-gray-400">
           New account registration is currently paused. <Link href="/auth/signup" className="text-gold-light underline">Learn more</Link>.
