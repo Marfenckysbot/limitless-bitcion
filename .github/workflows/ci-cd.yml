@@ -40,6 +40,9 @@ jobs:
     - name: Install dependencies
       run: npm install
 
+    - name: Audit dependency vulnerabilities
+      run: npm audit --audit-level=high
+
     - name: Validate Prisma schema and generate client
       run: npx prisma validate && npx prisma generate
       env:
