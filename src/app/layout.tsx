@@ -5,8 +5,8 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'LuxuryGold - Premium Jewelry Marketplace',
-  description: 'Buy & sell gold and fine jewelry with secure shipping and Bitcoin conversion',
+  title: 'LuxuryGold — Marketplace Preview',
+  description: 'Explore a precious-metals and fine-jewelry marketplace concept. Transactions and fulfilment are not yet enabled.',
 }
 
 export default function RootLayout({
