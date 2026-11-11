@@ -36,6 +36,11 @@ jobs:
     - name: Install dependencies
       run: npm install
 
+    - name: Validate Prisma schema and generate client
+      run: npx prisma validate && npx prisma generate
+      env:
+        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/luxurygold_test
+
     - name: Run linting
       run: npm run lint
 
